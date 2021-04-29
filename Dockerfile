@@ -2,19 +2,14 @@ FROM node:alpine3.13
 
 ENV APP_ROOT=/usr/src/e2e
 
-RUN apk add sudo
+RUN addgroup -S app && adduser -S -G app app
+USER app
 
-#RUN adduser -D -u 1001 -s /bin/sh -G wheel app
-#RUN echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-#
-#USER app
-#
 WORKDIR $APP_ROOT
-#COPY --chown=app:app . $APP_ROOT
-COPY . $APP_ROOT
+COPY --chown=app:app . $APP_ROOT
 
 RUN yarn install
 
-EXPOSE 443
+EXPOSE 3000
 
-ENTRYPOINT ["./entrypoint.sh"]
+CMD ["/usr/local/bin/node", "app.js"]
