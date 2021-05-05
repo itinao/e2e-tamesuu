@@ -7,18 +7,43 @@ on:
 jobs:
 
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: hogehoge
+    - name: init
       uses: google-github-actions/get-gke-credentials@main
       with:
         cluster_name: e2e
         location: us-central1
         credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-    - name: get-pods
-      run: which kubectl
-      #run: kubectl get pods
+    - name: apply && wait
+      run: kubectl apply -f kube/job.yaml && kubectl wait --for=condition=ready pod -l app=pingpong --timeout=600s
+
+  e2e-chrome:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: init
+      uses: google-github-actions/get-gke-credentials@main
+      with:
+        cluster_name: e2e
+        location: us-central1
+        credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+    - name: apply && wait
+      run: sleep 1
+
+  finish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: init
+      uses: google-github-actions/get-gke-credentials@main
+      with:
+        cluster_name: e2e
+        location: us-central1
+        credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+    - name: wait && delete
+      run: kubectl wait --for=condition=complete --timeout=600s job/pingpong && kubectl delete -f kube/job.yaml
 
 #    - name: Install kubectl
 #      uses: azure/setup-kubectl@v1
