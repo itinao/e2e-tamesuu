@@ -10,34 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: deploy to cluster
-      uses: steebchen/kubectl@master
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v1
+    - name: Run kubectl
       env:
         KUBE_CONFIG_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      with:
-        args: get all
-
-  build2:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: deploy to cluster
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      with:
-        args: get all
-
-  build3:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: deploy to cluster
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      with:
-        args: get all
+      run: |
+        echo "$KUBE_CONFIG_DATA" | base64 --decode > /tmp/kube_config
+        export KUBECONFIG=/tmp/kube_config
+        kubectl get pods
 
 #  build:
 #    runs-on: ubuntu-latest
