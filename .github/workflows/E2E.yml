@@ -10,17 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Install kubectl
-      uses: azure/setup-kubectl@v1
-    - name: Run kubectl
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      run: |
-        echo "$KUBE_CONFIG_DATA" | base64 --decode > /tmp/kube_config
-        export KUBECONFIG=/tmp/kube_config
-        which kubectl
-        kubectl config view
-        kubectl get pods
+    - name: hogehoge
+      uses: google-github-actions/get-gke-credentials@main
+      with:
+        cluster_name: e2e
+        location: us-central1
+        credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+    - name: get-pods
+      run: kubectl get pods
+    
+#    - name: Install kubectl
+#      uses: azure/setup-kubectl@v1
+#    - name: Run kubectl
+#      env:
+#        KUBE_CONFIG_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+#      run: |
+#        echo "$KUBE_CONFIG_DATA" | base64 --decode > /tmp/kube_config
+#        export KUBECONFIG=/tmp/kube_config
+#        which kubectl
+#        kubectl config view
+#        kubectl get pods
 
 #  build:
 #    runs-on: ubuntu-latest
