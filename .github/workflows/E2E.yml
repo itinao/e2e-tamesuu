@@ -18,4 +18,4 @@ jobs:
         CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
         ZONE_NAME: us-central1-c
       with:
-        args: apply -f ./kube/job.yaml 
+        args: apply -f kube/job.yaml 
