@@ -17,8 +17,9 @@ jobs:
         location: us-central1
         credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
     - name: get-pods
-      run: kubectl get pods
-    
+      run: which kubectl
+      #run: kubectl get pods
+
 #    - name: Install kubectl
 #      uses: azure/setup-kubectl@v1
 #    - name: Run kubectl
