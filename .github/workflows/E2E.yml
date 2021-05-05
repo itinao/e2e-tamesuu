@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: kubectl - Google Cloud GKE cluster.
+    - name: kubectl apply && wait
       uses: ameydev/gke-kubectl-action@master
       env:
         PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -18,4 +18,4 @@ jobs:
         CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
         ZONE_NAME: us-central1
       with:
-        args: apply -f kube/job.yaml 
+        args: apply -f kube/job.yaml && kubectl wait --for=condition=ready pod -l app=pingpong --timeout=600s
