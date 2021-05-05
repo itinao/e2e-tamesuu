@@ -18,6 +18,7 @@ jobs:
       run: |
         echo "$KUBE_CONFIG_DATA" | base64 --decode > /tmp/kube_config
         export KUBECONFIG=/tmp/kube_config
+        which kubectl
         kubectl get pods
 
 #  build:
