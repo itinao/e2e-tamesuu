@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pingpong
+  labels:
+    app: pingpong
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        app: pingpong
+    spec:
+      containers:
+      - name: pingpong
+        image: us.gcr.io/e2e-309902/hogehoge:latest
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Never
